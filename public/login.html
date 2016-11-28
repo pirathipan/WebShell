@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Page</title>
+</head>
+<body>
+    <form action="" method="post" name="login" id="form">
+        <input id="name" type="text" placeholder="name">
+        <input id="password" type="password" placeholder="passeword">
+        <input type="submit" value="login">
+    </form>
+    <br>
+    <div class="error"></div>
+    <script>
+        $(function () {
+            var socket = io.connect('http://localhost:8080');
+            $('form').submit(function(e){
+                e.preventDefault();
+                var name = $('#name').val();
+                var password = $('#password').val();
+
+                if(!(name) || !(password)){
+                    $('.error').innerHTML("Veuillez bien remplir");
+
+                }else{
+                    $.post('/login', {
+                        name: $('name').val(),
+                        password: $('password').val()
+                    }).done(function (result) {
+                        localStorage.setItem('token', result.token);
+                        console.log(result.token);
+                    });
+
+                    window.location.replace("/");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
